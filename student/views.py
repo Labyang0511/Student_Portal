@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Student, Teacher, Course, Enrollment
 
-# --- ENROLLMENT (DASHBOARD) ---
+
 def enrollment_list(request):
     if request.method == "POST":
-        # 1. EDIT LOGIC
+      
         if 'edit_enrollment' in request.POST:
             e = get_object_or_404(Enrollment, id=request.POST.get('enrollment_id'))
             
-            # Cleaning the grade input for the update
+        
             grade_value = request.POST.get('grade')
             e.grade = grade_value if grade_value else None
             
@@ -19,12 +19,10 @@ def enrollment_list(request):
             messages.success(request, "Enrollment updated successfully!")
             return redirect('home')
 
-        # 2. CREATE LOGIC
         else:
             student_id = request.POST.get('student')
             course_id = request.POST.get('course')
             
-            # Validation: Prevent duplicate enrollment
             if Enrollment.objects.filter(student_id=student_id, course_id=course_id).exists():
                 messages.error(request, "This student is already enrolled in this course!")
             else:
@@ -55,7 +53,6 @@ def enrollment_list(request):
     }
     return render(request, 'student/enrollment_list.html', context)
 
-# --- STUDENT CRUD ---
 def student_list(request):
     if request.method == "POST":
         if 'edit_student' in request.POST:
@@ -79,7 +76,6 @@ def student_list(request):
     
     return render(request, 'student/student_list.html', {'students': Student.objects.all()})
 
-# --- TEACHER CRUD ---
 def teacher_list(request):
     if request.method == "POST":
         if 'edit_teacher' in request.POST:
@@ -103,7 +99,6 @@ def teacher_list(request):
     
     return render(request, 'student/teacher_list.html', {'teachers': Teacher.objects.all()})
 
-# --- COURSE CRUD ---
 def course_list(request):
     if request.method == "POST":
         if 'edit_course' in request.POST:
@@ -126,7 +121,6 @@ def course_list(request):
     context = {'courses': Course.objects.all(), 'teachers': Teacher.objects.all()}
     return render(request, 'student/course_list.html', context)
 
-# --- DELETE LOGIC ---
 def delete_student(request, pk):
     get_object_or_404(Student, pk=pk).delete()
     messages.warning(request, "Student record deleted.")
