@@ -1,0 +1,57 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-4 shadow-sm">
+            <h5 class="fw-bold mb-3 text-secondary">Hire New Teacher</h5>
+            <form method="POST"> {% csrf_token %}
+                <input type="text" name="first_name" class="form-control mb-2" placeholder="First Name" required>
+                <input type="text" name="last_name" class="form-control mb-2" placeholder="Last Name" required>
+                <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+                <input type="text" name="specialization" class="form-control mb-2" placeholder="Specialization" required>
+                <select name="status" class="form-select mb-3">
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                </select>
+                <button type="submit" name="add_teacher" class="btn btn-primary w-100">Save Teacher</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card p-4 shadow-sm">
+            <table class="table align-middle">
+                <thead><tr><th>Name</th><th>Specialization</th><th>Status</th><th class="text-center">Action</th></tr></thead>
+                <tbody>
+                    {% for t in teachers %}
+                    <tr>
+                        <td><strong>{{ t.first_name }} {{ t.last_name }}</strong></td>
+                        <td>{{ t.specialization }}</td>
+                        <td><span class="badge {% if t.employment_status == 'Full-time' %}bg-success{% else %}bg-info{% endif %}">{{ t.employment_status }}</span></td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editTeacher{{ t.id }}">Edit</button>
+                            <a href="{% url 'delete_teacher' t.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete record?')">Delete</a>
+                        </td>
+                    </tr>
+                    <div class="modal fade" id="editTeacher{{ t.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <form method="POST" class="modal-content"> {% csrf_token %}
+                                <div class="modal-header"><h5>Edit Teacher</h5></div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="teacher_id" value="{{ t.id }}">
+                                    <input type="text" name="specialization" class="form-control mb-2" value="{{ t.specialization }}">
+                                    <select name="status" class="form-select">
+                                        <option value="Full-time" {% if t.employment_status == "Full-time" %}selected{% endif %}>Full-time</option>
+                                        <option value="Part-time" {% if t.employment_status == "Part-time" %}selected{% endif %}>Part-time</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer"><button type="submit" name="edit_teacher" class="btn btn-success">Update</button></div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

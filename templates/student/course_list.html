@@ -1,0 +1,54 @@
+{% extends 'student/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-4 shadow-sm">
+            <h5 class="fw-bold mb-3 text-secondary">Create New Course</h5>
+            <form method="POST"> {% csrf_token %}
+                <input type="text" name="code" class="form-control mb-2" placeholder="Subject Code" required>
+                <input type="text" name="name" class="form-control mb-2" placeholder="Course Title" required>
+                <input type="number" name="units" class="form-control mb-2" placeholder="Units" required>
+                <input type="text" name="schedule" class="form-control mb-2" placeholder="Schedule">
+                <select name="teacher" class="form-select mb-3" required>
+                    <option value="" selected disabled>Select Instructor</option>
+                    {% for t in teachers %}<option value="{{ t.id }}">{{ t.first_name }} {{ t.last_name }}</option>{% endfor %}
+                </select>
+                <button type="submit" name="add_course" class="btn btn-primary w-100">Add Course</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card p-4 shadow-sm">
+            <table class="table table-hover align-middle">
+                <thead><tr><th>Code</th><th>Title</th><th>Teacher</th><th>Action</th></tr></thead>
+                <tbody>
+                    {% for c in courses %}
+                    <tr>
+                        <td class="fw-bold text-primary">{{ c.course_code }}</td>
+                        <td>{{ c.course_name }}</td>
+                        <td>{{ c.teacher.last_name }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editCourse{{ c.id }}">Edit</button>
+                            <a href="{% url 'delete_course' c.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this course?')">Delete</a>
+                        </td>
+                    </tr>
+                    <div class="modal fade" id="editCourse{{ c.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <form method="POST" class="modal-content"> {% csrf_token %}
+                                <div class="modal-header"><h5>Edit Course</h5></div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="course_id" value="{{ c.id }}">
+                                    <input type="text" name="name" class="form-control mb-2" value="{{ c.course_name }}">
+                                    <input type="text" name="schedule" class="form-control" value="{{ c.schedule }}">
+                                </div>
+                                <div class="modal-footer"><button type="submit" name="edit_course" class="btn btn-success">Update</button></div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'student/base.html' %}
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-4 shadow-sm">
+            <h5 class="fw-bold mb-3">Add Student</h5>
+            <form method="POST" action="." class="modal-content">
+                <input type="text" name="first_name" class="form-control mb-2" placeholder="First Name" required>
+                <input type="text" name="last_name" class="form-control mb-2" placeholder="Last Name" required>
+                <select name="gender" class="form-select mb-2">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <input type="date" name="birthdate" class="form-control mb-2" required>
+                <input type="text" name="address" class="form-control mb-2" placeholder="Address">
+                <input type="text" name="contact" class="form-control mb-2" placeholder="Contact Number">
+                <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+                <input type="number" name="year_level" class="form-control mb-2" placeholder="Year Level">
+                <input type="text" name="program" class="form-control mb-2" placeholder="Program">
+                <button type="submit" name="add_student" class="btn btn-primary w-100">Save Student</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card p-4 shadow-sm">
+            <h5 class="fw-bold mb-3">Student Directory</h5>
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Program</th>
+                        <th>Year</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    <tr>
+                        <td>{{ s.first_name }} {{ s.last_name }}</td>
+                        <td>{{ s.program }}</td>
+                        <td>{{ s.year_level }}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editStudent{{ s.id }}">
+                                Edit
+                            </button>
+                            
+                            <a href="{% url 'delete_student' s.id %}" 
+                               class="btn btn-sm btn-outline-danger" 
+                               onclick="return confirm('Are you sure you want to delete {{ s.first_name }}?')">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+
+                    <div class="modal fade" id="editStudent{{ s.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form method="POST" class="modal-content"> {% csrf_token %}
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-primary">Edit Student Info</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="student_id" value="{{ s.id }}">
+                                    
+                                    <div class="mb-2">
+                                        <label class="small fw-bold">Program</label>
+                                        <input type="text" name="program" class="form-control" value="{{ s.program }}">
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <label class="small fw-bold">Year Level</label>
+                                        <input type="number" name="year_level" class="form-control" value="{{ s.year_level }}">
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="small fw-bold">Address</label>
+                                        <input type="text" name="address" class="form-control" value="{{ s.address }}">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" name="edit_student" class="btn btn-success">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

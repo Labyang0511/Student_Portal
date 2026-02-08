@@ -1,0 +1,15 @@
+# Virtual Environment (Very important to ignore!)
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Database (usually ignored so you don't share personal data)
+db.sqlite3
+
+# Folders created by your code editor
+.vscode/
+.idea/
