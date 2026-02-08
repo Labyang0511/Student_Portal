@@ -34,8 +34,7 @@ ROOT_URLCONF = 'StudentPortal_Project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # This 'DIRS' line is the secret sauce. It tells Django to look 
-        # for your 'templates' folder in the root directory.
+        
         'DIRS': [BASE_DIR / 'templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
@@ -51,7 +50,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'StudentPortal_Project.wsgi.application'
 
-# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -59,7 +57,6 @@ DATABASES = {
     }
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
