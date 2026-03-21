@@ -39,6 +39,7 @@
                                 <div class="modal-body">
                                     <input type="hidden" name="teacher_id" value="{{ t.id }}">
                                     <input type="text" name="specialization" class="form-control mb-2" value="{{ t.specialization }}">
+                                    <input type="text" name="department" class="form-control mb-2" placeholder="Department" value="{{ t.department }}">
                                     <select name="status" class="form-select">
                                         <option value="Full-time" {% if t.employment_status == "Full-time" %}selected{% endif %}>Full-time</option>
                                         <option value="Part-time" {% if t.employment_status == "Part-time" %}selected{% endif %}>Part-time</option>

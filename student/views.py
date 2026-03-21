@@ -5,14 +5,14 @@ from .models import Student, Teacher, Course, Enrollment
 
 def enrollment_list(request):
     if request.method == "POST":
-      
+
         if 'edit_enrollment' in request.POST:
             e = get_object_or_404(Enrollment, id=request.POST.get('enrollment_id'))
-            
-        
+
+
             grade_value = request.POST.get('grade')
             e.grade = grade_value if grade_value else None
-            
+
             e.status = request.POST.get('status')
             e.remarks = request.POST.get('remarks')
             e.save()
@@ -22,7 +22,7 @@ def enrollment_list(request):
         else:
             student_id = request.POST.get('student')
             course_id = request.POST.get('course')
-            
+
             if Enrollment.objects.filter(student_id=student_id, course_id=course_id).exists():
                 messages.error(request, "This student is already enrolled in this course!")
             else:
@@ -46,20 +46,13 @@ def enrollment_list(request):
     }
     return render(request, 'student/enrollment_list.html', context)
 
-    context = {
-        'enrollments': Enrollment.objects.all(),
-        'students': Student.objects.all(),
-        'courses': Course.objects.all(),
-    }
-    return render(request, 'student/enrollment_list.html', context)
-
 def student_list(request):
     if request.method == "POST":
         if 'edit_student' in request.POST:
             s = get_object_or_404(Student, id=request.POST.get('student_id'))
-            s.program = request.POST.get('edit_program')
-            s.year_level = request.POST.get('edit_year_level')
-            s.address = request.POST.get('edit_address')
+            s.program = request.POST.get('program')
+            s.year_level = request.POST.get('year_level')
+            s.address = request.POST.get('address')
             s.save()
             messages.success(request, f"Student {s.last_name} updated!")
         else:
@@ -69,11 +62,14 @@ def student_list(request):
                 email=request.POST.get('email'),
                 program=request.POST.get('program'),
                 year_level=request.POST.get('year_level'),
-                birthdate=request.POST.get('birthdate')
+                birthdate=request.POST.get('birthdate'),
+                address=request.POST.get('address'),
+                contact_number=request.POST.get('contact'),
+                gender=request.POST.get('gender')
             )
             messages.success(request, "New student added!")
         return redirect('student_list')
-    
+
     return render(request, 'student/student_list.html', {'students': Student.objects.all()})
 
 def teacher_list(request):
@@ -96,7 +92,7 @@ def teacher_list(request):
             )
             messages.success(request, "Teacher record created!")
         return redirect('teacher_list')
-    
+
     return render(request, 'student/teacher_list.html', {'teachers': Teacher.objects.all()})
 
 def course_list(request):
@@ -117,7 +113,7 @@ def course_list(request):
             )
             messages.success(request, "Course created!")
         return redirect('course_list')
-    
+
     context = {'courses': Course.objects.all(), 'teachers': Teacher.objects.all()}
     return render(request, 'student/course_list.html', context)
 

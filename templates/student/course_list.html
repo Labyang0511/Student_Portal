@@ -39,7 +39,8 @@
                                 <div class="modal-body">
                                     <input type="hidden" name="course_id" value="{{ c.id }}">
                                     <input type="text" name="name" class="form-control mb-2" value="{{ c.course_name }}">
-                                    <input type="text" name="schedule" class="form-control" value="{{ c.schedule }}">
+                                    <input type="text" name="schedule" class="form-control mb-2" value="{{ c.schedule }}">
+                                    <input type="text" name="room" class="form-control" placeholder="Room Number" value="{{ c.room_number }}">
                                 </div>
                                 <div class="modal-footer"><button type="submit" name="edit_course" class="btn btn-success">Update</button></div>
                             </form>

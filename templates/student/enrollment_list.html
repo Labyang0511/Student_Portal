@@ -29,6 +29,7 @@
                     <option value="Completed">Completed</option>
                 </select>
                 <input type="text" name="grade" class="form-control mb-2" placeholder="Grade">
+                <input type="text" name="remarks" class="form-control mb-2" placeholder="Remarks">
                 <button type="submit" name="add_enrollment" class="btn btn-primary w-100">Enroll Student</button>
             </form>
         </div>
@@ -46,7 +47,7 @@
                         <td>{{ e.grade|default:"N/A" }}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editEnroll{{ e.id }}">Edit</button>
-                            <a href="{% url 'delete_enrollment' e.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this enrollment?')">Del</a>
+                            <a href="{% url 'delete_enrollment' e.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove this enrollment?')">Delete</a>
                         </td>
                     </tr>
                     <div class="modal fade" id="editEnroll{{ e.id }}" tabindex="-1">
@@ -61,7 +62,9 @@
                                         <option value="Completed" {% if e.status == "Completed" %}selected{% endif %}>Completed</option>
                                     </select>
                                     <label class="small fw-bold">Grade</label>
-                                    <input type="text" name="grade" class="form-control" value="{{ e.grade|default:'' }}">
+                                    <input type="text" name="grade" class="form-control mb-2" value="{{ e.grade|default:'' }}">
+                                    <label class="small fw-bold">Remarks</label>
+                                    <input type="text" name="remarks" class="form-control" value="{{ e.remarks|default:'' }}">
                                 </div>
                                 <div class="modal-footer"><button type="submit" name="edit_enrollment" class="btn btn-success">Save</button></div>
                             </form>
